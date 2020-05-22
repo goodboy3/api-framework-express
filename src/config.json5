@@ -1,7 +1,16 @@
 //config.json5
 { 
     //服务器设置
-    "server": {
-        "port": 40000, //端口
+    server: {
+        port: 40000, //服务所使用的端口号
+    },
+
+    //数据库配置
+    database: {
+        server: "127.0.0.1",//地址
+        database: "test",//数据库名称
+        user: "root",//用户名
+        password: "123456",//密码
+        port: 3306,//端口号
     }
 }

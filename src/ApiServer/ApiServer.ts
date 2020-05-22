@@ -3,6 +3,7 @@
 import express, { Application } from "express"
 import { config, rootDir } from "../start";
 import path from 'path'
+import { Routers } from "./Routers";
 
 
 
@@ -24,17 +25,11 @@ export class ApiServer
     }
 
     //此类的核心成员
-    private app: Application = null;
+    app: Application = null;
 
     //初始化
     Init()
     {
-        this.app = express();
-        //此处使用config.server.port 这是从配置文件中获取的内容
-        //如果配置文件中有port定义,就使用配置文件中的,如果没有,则使用默认50000
-        let serverPort = config.server.port || 50000;
-        let server = this.app.listen(serverPort, () => { console.info(`Example app listening on port ${serverPort}`) })
-
         //让express 能够处理 async/await 中抛出的异常
         const layer = require('express/lib/router/layer');
         Object.defineProperty(layer.prototype, 'handle', {
@@ -59,6 +54,17 @@ export class ApiServer
             }
 
         });
+
+
+        this.app = express();
+        //此处使用config.server.port 这是从配置文件中获取的内容
+        //如果配置文件中有port定义,就使用配置文件中的,如果没有,则使用默认50000
+        let serverPort = config.server.port || 50000;
+        let server = this.app.listen(serverPort, () => { console.info(`app listening on port ${serverPort}`) })
+        server.on('error', (error:Error) =>
+        {
+            console.error(error);
+        })
     }
 
     Run()
@@ -69,6 +75,11 @@ export class ApiServer
 
         //public文件夹下的静态资源,可以直接进行访问
         this.app.use(express.static(path.join(rootDir, 'public')));
+
+        //路由设置
+        let router = new Routers();
+        router.PathRouter();
+        this.app.use('/api', router.apiRouter);
     }
 
     //测试消息
