@@ -5,6 +5,8 @@ import { config, rootDir } from "../start";
 import path from 'path'
 import { Routers } from "./Routers";
 
+import cookieParser from 'cookie-parser'
+import session from "express-session"
 
 
 export class ApiServer
@@ -75,10 +77,18 @@ export class ApiServer
 
         //public文件夹下的静态资源,可以直接进行访问
         this.app.use(express.static(path.join(rootDir, 'public')));
+        this.app.use(cookieParser());
+        this.app.use(session({
+            secret: "keyboard cat",
+            resave: false,
+            saveUninitialized: true,
+            cookie: ({ maxAge: 5 * 60 * 1000, secure: false }),
+        }));
 
         //路由设置
         let router = new Routers();
         router.PathRouter();
+        
         this.app.use('/api', router.apiRouter);
     }
 
@@ -92,6 +102,11 @@ export class ApiServer
             });
             res.end('Hello World\n' + new Date().toString());
         })
+
+       
     }
+
+    
+
 
 }
