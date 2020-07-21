@@ -1,0 +1,7 @@
+dist/
+build/
+app/
+node_modules/
+logs/
+cache/
+.vscode/sftp.json
