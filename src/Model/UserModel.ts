@@ -15,7 +15,7 @@ export class UserModel extends Model
     public phone!: string | null;//可以为空的字段
     public username!: string|null;
     public nickname!: string|null;
-    public age!: number|null;
+    public age!: number | null;
 }
 
 UserModel.init(
@@ -48,7 +48,7 @@ UserModel.init(
         age: {
             type:  DataTypes.INTEGER({length:3}),
             allowNull: true,
-        }
+        },
     },
     {
 
